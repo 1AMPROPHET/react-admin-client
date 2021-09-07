@@ -3,6 +3,7 @@ import RoleAddForm from '../../components/addForm/RoleAddForm'
 import AuthForm from '../../components/addForm/AuthForm'
 import { reqGetRoles, reqAddRole, reqUpdateRole } from '../../api/role'
 import memoryUtils from '../../utils/memoryUtils'
+import storageUtils from '../../utils/storageUtils'
 import { formatDate } from '../../utils/dateFormat'
 import {
   Card,
@@ -36,10 +37,9 @@ export default class Role extends Component {
       {
         title: 'Create Time',
         dataIndex: 'create_time',
-        // render: (create_time) => {
-        //   console.log(create_time)
-        //   return formatDate(create_time, "yyyy-MM-dd hh:mm:ss")
-        // }
+        render: (create_time) => {
+          return formatDate(new Date(create_time), "yyyy-MM-dd hh:mm:ss")
+        }
       },
       {
         title: 'Authorization Time',
@@ -93,11 +93,19 @@ export default class Role extends Component {
     // 发送请求
     const res = await reqUpdateRole(role)
     if (res.status === 0) {
-      message.success('Update role succeed')
-      this.setState({
-        roles: [...this.state.roles],
-        isShowAuth: false
-      })
+      // 日过更新的是自己的角色, 需要重新登录
+      if (role._id === memoryUtils.user.role._id) {
+        memoryUtils.user = {}
+        storageUtils.removeUser()
+        this.props.history.replace('/login')
+        message.success('Current role updated, please login')
+      } else {
+        message.success('Update role succeed')
+        this.setState({
+          roles: [...this.state.roles],
+          isShowAuth: false
+        })
+      }
     } else {
       message.error('Update role failed')
     }
@@ -124,6 +132,7 @@ export default class Role extends Component {
         //   roles
         // })
         // 优化
+        
         this.setState(state => ({
           roles: [...state.roles, role],
           isShowAdd: false
@@ -179,11 +188,6 @@ export default class Role extends Component {
       </span>
     )
 
-    const rowSelection = {
-      onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      }
-    }
 
     return (
       <Card title={title}>
@@ -195,7 +199,9 @@ export default class Role extends Component {
           rowSelection={{
             type: 'radio',
             selectedRowKeys: [role._id],
-            rowSelection
+            onSelect: (role) => { // 解决无法选择radio的问题
+              this.setState({role})
+            }
           }}
           onRow={this.onRow}
         >

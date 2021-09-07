@@ -3,7 +3,8 @@ export const menuList = [
     text: "Home",
     link: "/home",
     key: 1,
-    icon: "HomeOutlined"
+    icon: "HomeOutlined",
+    isPublic: true // 公开的
   },
   {
     text: "User",

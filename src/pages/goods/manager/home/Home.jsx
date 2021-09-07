@@ -200,6 +200,7 @@ export default class ProductHome extends Component {
           columns={this.CategoryCol}
           dataSource={goods}
           pagination={{
+            current: this.pageNum,
             pageSize: PAGE_SIZE, 
             position: "bottomRight",
             showQuickJumper: true,
