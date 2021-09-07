@@ -1,0 +1,22 @@
+.loading {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  background-color: #26292e;
+  align-items: center;
+  text-align: center;
+  img {
+    margin: 0 auto;
+    animation: myRotate 5s linear infinite;
+    height: 300px;
+    width: 300px;
+  }
+  @keyframes myRotate {
+    from {
+      transform: rotate(0)
+    } 
+    to {
+      transform: rotate(360deg)
+    }
+  }
+}

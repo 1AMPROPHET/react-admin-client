@@ -1,0 +1,39 @@
+.myHeader {
+  height: 100px;
+  color: #eee;
+  .header-top {
+    height: 50px;
+    line-height: 50px;
+    text-align: right;
+  }
+  .header-bottom {
+    height: 50px;
+    line-height: 50px;
+    display: flex;
+    align-items: center;
+    .header-bottom-left {
+      width: 25%;
+      text-align: center;
+      font-size: 24px;
+      position: relative;
+      &::after {
+        position: absolute;
+        content: '';
+        right: 50%;
+        transform: translateX(50%);
+        top: 100%;
+        border-top: 20px solid #1890ff;
+        border-right: 20px solid transparent;
+        border-bottom: 20px solid transparent;
+        border-left: 20px solid transparent;
+      }
+    }
+    .header-bottom-right {
+      width: 75%;
+      text-align: right;
+      span {
+        color: #ccc;
+      }
+    }
+  }
+}
