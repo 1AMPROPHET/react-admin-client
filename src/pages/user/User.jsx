@@ -54,8 +54,8 @@ export default class User extends Component {
       {
         title: 'Role',
         dataIndex: 'role_id',
-        // render: (role_id) => this.state.roles.find(role => role._id === role_id).name
-        render: (role_id) => this.roleNames[role_id]
+        render: (role_id) => this.state.roles.find(role => role._id === role_id).name
+        // render: (role_id) => this.roleNames(role_id)
       },
       {
         title: 'Methods',

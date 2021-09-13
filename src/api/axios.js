@@ -9,7 +9,8 @@ export function request(option, method = "post") {
     // 创建axios实例
     const instance = originAxios.create({
       method: method,
-      baseURL: 'http://localhost:8080/proxy',
+      baseURL: '/api', // nginx解决跨域
+      // baseURL: 'http://localhost:5000/api', // 开发环境，
       timeout: 5000
     })
 
