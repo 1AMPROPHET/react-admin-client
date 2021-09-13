@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import RoleAddForm from '../../components/addForm/RoleAddForm'
 import AuthForm from '../../components/addForm/AuthForm'
 import { reqGetRoles, reqAddRole, reqUpdateRole } from '../../api/role'
-import memoryUtils from '../../utils/memoryUtils'
-import storageUtils from '../../utils/storageUtils'
+// import memoryUtils from '../../utils/memoryUtils'
+// import storageUtils from '../../utils/storageUtils'
 import { formatDate } from '../../utils/dateFormat'
+import { connect } from 'react-redux'
+import { logout } from '../../redux/actions/login'
 import {
   Card,
   Table,
@@ -13,7 +15,7 @@ import {
   message
 } from 'antd'
 
-export default class Role extends Component {
+class Role extends Component {
 
   constructor (props) {
     super(props)
@@ -88,16 +90,18 @@ export default class Role extends Component {
     const menus = this.authRef.current.getMenus()
 
     role.menus = menus
-    role.auth_name = memoryUtils.user.username
+    role.auth_name = this.props.user.username
     role.auth_time = Date.now()
     // 发送请求
     const res = await reqUpdateRole(role)
     if (res.status === 0) {
       // 日过更新的是自己的角色, 需要重新登录
-      if (role._id === memoryUtils.user.role._id) {
-        memoryUtils.user = {}
-        storageUtils.removeUser()
-        this.props.history.replace('/login')
+      if (role._id === this.props.user.role._id) {
+        // this.props.user = {}
+        // storageUtils.removeUser()
+        // this.props.history.replace('/login')
+        // redux
+        this.props.logout()
         message.success('Current role updated, please login')
       } else {
         message.success('Update role succeed')
@@ -228,3 +232,12 @@ export default class Role extends Component {
     )
   }
 }
+
+export default connect(
+  state => ({
+    user: state.userReducer
+  }),
+  {
+    logout
+  }
+)(Role)

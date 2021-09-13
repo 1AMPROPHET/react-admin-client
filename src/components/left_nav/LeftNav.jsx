@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import logo from "../../assets/images/logo/logo192.png"
 import { menuList } from '../../assets/text/left-nav-statics'
 import { Link, withRouter } from 'react-router-dom';
-import memoryUtils from '../../utils/memoryUtils'
+// import memoryUtils from '../../utils/memoryUtils'
+import { connect } from 'react-redux';
+import { setHeadTitle } from '../../redux/actions/headTitle';
 
 import { Menu } from 'antd'
 import {
@@ -59,8 +61,11 @@ class LeftNav extends Component {
   hasAuth = (item) => {
     const {link, isPublic} = item
 
-    const menus = memoryUtils.user.role.menus
-    const username = memoryUtils.user.username
+    // const menus = memoryUtils.user.role.menus
+    // const username = memoryUtils.user.username
+    // 使用redux
+    const menus = this.props.user.role.menus
+    const username = this.props.user.username
     
     // 1. 如果当前用户是admin，拥有所有权限，返回true
     // 2. 如果当前item是公开的，直接返回true
@@ -83,13 +88,18 @@ class LeftNav extends Component {
         // 如果当前用户有权限，才需要显示对应的菜单项
         if (this.hasAuth(menuItem)) {
           if (menuItem.subMenu === undefined) {
+            // redux 判断item是否是当前的item
+            if (menuItem.link === path || path.indexOf(menuItem.link) === 0) {
+              // 更新redux的headTitle状态
+              this.props.setHeadTitle(menuItem.text)
+            }
             return (
               <Menu.Item 
                 key={menuItem.link} 
                 // 动态生成Icon
                 icon={this.renderIcon(menuItem.icon, this.state.icons)}
               >
-                <Link to={menuItem.link}>
+                <Link to={menuItem.link} onClick={() => this.props.setHeadTitle(menuItem.text)}>
                   {menuItem.text}
                 </Link>
               </Menu.Item>
@@ -154,4 +164,11 @@ class LeftNav extends Component {
   }
 }
 
-export default withRouter(LeftNav)
+export default connect(
+  state => ({
+    user: state.userReducer
+  }),
+  {
+    setHeadTitle
+  }
+)(withRouter(LeftNav))

@@ -13,6 +13,8 @@
     "customize-cra": "^1.0.0",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
+    "echarts": "^5.2.0",
+    "echarts-for-react": "^3.0.1",
     "html-to-draftjs": "^1.5.0",
     "less": "^4.1.1",
     "less-loader": "^6.0.0",
@@ -20,9 +22,13 @@
     "react-app-rewired": "^2.1.8",
     "react-dom": "^17.0.2",
     "react-draft-wysiwyg": "^1.14.7",
+    "react-redux": "^7.2.5",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-sticky": "^6.0.3",
+    "redux": "^4.1.1",
+    "redux-thunk": "^2.3.0",
     "store": "^2.0.12",
     "web-vitals": "^1.0.1"
   },
@@ -49,5 +55,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "redux-devtools-extension": "^2.13.9"
   }
 }

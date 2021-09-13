@@ -5,9 +5,14 @@ import { Modal } from 'antd'
 import { getWeather } from '../../api/weather'
 import { formatDate } from '../../utils/dateFormat'
 import { menuList } from '../../assets/text/left-nav-statics'
+import { connect } from 'react-redux'
+import {
+  setHeadTitle
+} from '../../redux/actions/headTitle'
+import { logout } from '../../redux/actions/login'
 
-import memoryUtils from '../../utils/memoryUtils'
-import storageUtils from '../../utils/storageUtils'
+// import memoryUtils from '../../utils/memoryUtils'
+// import storageUtils from '../../utils/storageUtils'
 
 import './myHeader.less'
 
@@ -77,14 +82,13 @@ class Header extends Component {
       okText: 'Yes',
       cancelText: 'No',
       onOk: () => {
-        // 先删除保存的用户信息
-        storageUtils.removeUser()
-        memoryUtils.user = {}
+        // // 先删除保存的用户信息
+        // storageUtils.removeUser()
+        // memoryUtils.user = {}
+        // 更新redux
+        this.props.logout()
         // 点击否后跳转到login界面
         this.props.history.replace('/login')
-      },
-      onCancel: () => {
-        
       }
     })
   }
@@ -93,9 +97,12 @@ class Header extends Component {
 
     const {date, temperature, weather} = this.state
 
-    const username = memoryUtils.user.username
+    // const username = memoryUtils.user.username
+    const username = this.props.user.username
 
-    const title = this.getTitle()
+    // const title = this.getTitle()
+    // 使用redux
+    const title = this.props.headTitle
 
     return (
       <div className="myHeader">
@@ -115,4 +122,15 @@ class Header extends Component {
   }
 }
 
-export default withRouter(Header)
+// 生成容器组件
+
+export default connect(
+  state => ({
+    headTitle: state.headTitleReducer,
+    user: state.userReducer
+  }),
+  {
+    setHeadTitle,
+    logout
+  }
+)(withRouter(Header))
